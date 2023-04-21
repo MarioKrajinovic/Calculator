@@ -1,45 +1,83 @@
 import React from "react"
+import Display from "./Display"
+import Buttons from "./Buttons"
+
+var count = 0
 
 export default function App(){
-    var val = document.getElementById("inp")
+    const [write, setWrite] = React.useState("0")
 
+    if(write.substring(write.length - 2, write.length) === "++" || write.substring(write.length -2, write.length) === "--" ||write.substring(write.length -2, write.length) === "//" || write.substring(write.length -2, write.length) === "%%" || write.substring(write.length -2, write.length) === ".." || write.substring(write.length - 3, write.length) === "***" ){
+        setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length - 1))
+    }
+    else if(write.substring(write.length - 2, write.length) === "+-" || write.substring(write.length - 2, write.length) === "+/" || write.substring(write.length - 2, write.length) === "+%" || write.substring(write.length - 2, write.length) === "+."){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === "-+" || write.substring(write.length - 2, write.length) === "-/" || write.substring(write.length - 2, write.length) === "-%" || write.substring(write.length - 2, write.length) === "-."){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === "*-" || write.substring(write.length - 2, write.length) === "*+" || write.substring(write.length - 2, write.length) === "*/" || write.substring(write.length - 2, write.length) === "*%" || write.substring(write.length - 2, write.length) === "*."){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === "/-" || write.substring(write.length - 2, write.length) === "/+" || write.substring(write.length - 2, write.length) === "/%" || write.substring(write.length - 2, write.length) === "/."){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === "%-" || write.substring(write.length - 2, write.length) === "%/" || write.substring(write.length - 2, write.length) === "%+" || write.substring(write.length - 2, write.length) === "%."){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === ".-" || write.substring(write.length - 2, write.length) === "./" || write.substring(write.length - 2, write.length) === ".%" || write.substring(write.length - 2, write.length) === ".+"){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length - 1), prevWrite.substring(prevWrite.length - 1, prevWrite.length)))
+    }
+    else if(write.substring(write.length - 2, write.length) === "-*" || write.substring(write.length - 2, write.length) === "+*" || write.substring(write.length - 2, write.length) === "/*" || write.substring(write.length - 2, write.length) === "%*" || write.substring(write.length - 2, write.length) === ".*"){
+        setWrite(prevWrite => prevWrite = prevWrite.replace(prevWrite.substring(prevWrite.length - 2, prevWrite.length -1 ), ""))
+    }
+    else if(write === "%" || write === "/" || write === "*" || write === "." || write === "+"){
+        setWrite("")
+    }
+
+    if(write.substring(write.length -1, write.length) === "."){
+        count += 1
+    }
+    if(count >= 2 && write.substring(write.length -1, write.length) === ".") {
+        setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length - 1))
+    }
+
+    write.substring(write.length -1, write.length) === "+" ||
+    write.substring(write.length -1, write.length) === "-" ||
+    write.substring(write.length -1, write.length) === "*" ||
+    write.substring(write.length -1, write.length) === "/" ||
+    write.substring(write.length -1, write.length) === "%" ? count = 0 : count
+
+    console.log(count)
     function add(v){
-        val.value += v
-    }
+        write.substring(write.length -2, write.length) === "+0" && v != "." ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length -1)) : write
+        write.substring(write.length -2, write.length) === "-0" && v != "." ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length -1)) : write
+        write.substring(write.length -2, write.length) === "*0" && v != "." ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length -1)) : write
+        write.substring(write.length -2, write.length) === "/0" && v != "." ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length -1)) : write
+        write.substring(write.length -2, write.length) === "%0" && v != "." ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length -1)) : write
 
+        if(write === "0" && v != "."){
+            setWrite(prevWrite => prevWrite = v)
+        }
+        else{
+            setWrite(prevWrite => prevWrite += v)
+        }
+    }
     function exe(){
-        val.value = eval(val.value)
+        write.substring(write.length - 1, write.length) === "+" || write.substring(write.length - 1, write.length) === "-" || write.substring(write.length - 1, write.length) === "*" || write.substring(write.length - 1, write.length) === "/" || write.substring(write.length - 1, write.length) === "." || write.substring(write.length - 1, write.length) === "%" ? setWrite(prevWrite => prevWrite = prevWrite.substring(0, write.length -1)) : setWrite(prevWrite => prevWrite = String(eval(prevWrite)))
+    }
+    function clear(){
+        setWrite("")
+        count = 0
+    }
+    function deleted(){
+        setWrite(prevWrite => prevWrite = prevWrite.substring(0, prevWrite.length - 1))
     }
 
-    function clear(){
-        val.value = ""
-    }
-    function del(){
-        val.value = val.value.substr(0, val.value.length -1)
-    }
     return(
         <div id="calculator">
-            <div className="calculator-display"><input type="text" id="inp" placeholder="0" /></div>
-            <div className="calculator-keys">
-                <button onClick={() => add("+")} className="key--operator">+</button>
-                <button onClick={() => add("-")} className="key--operator">-</button>
-                <button onClick={() => add("*")} className="key--operator">*</button>
-                <button onClick={() => add("/")} className="key--operator">/</button>
-                <button onClick={() => add(7)}>7</button>
-                <button onClick={() => add(8)}>8</button>
-                <button onClick={() => add(9)}>9</button>
-                <button onClick={del} className="key--operator">⌫</button>
-                <button onClick={() => add(4)}>4</button>
-                <button onClick={() => add(5)}>5</button>
-                <button onClick={() => add(6)}>6</button>
-                <button onClick={() => add(1)}>1</button>
-                <button onClick={() => add(2)}>2</button>
-                <button onClick={() => add(3)}>3</button>
-                <button onClick={() => add(".")}>.</button>
-                <button onClick={() => add(0)} className="zero">0</button>
-                <button onClick={exe} className="key--equal">=</button>
-                <button onClick={clear} data-action="clear">AC</button>
-            </div>
+            <Display pip = {write}/>
+            <Buttons handleClick = {add} execute={exe} clean={clear} delete={deleted}/>
         </div>
     )
 }
